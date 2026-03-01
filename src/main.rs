@@ -6,6 +6,7 @@ use axum::{
     http::StatusCode,
     middleware::{self, Next},
     response::Response,
+    routing::get,
     Router,
 };
 use rmcp::transport::streamable_http_server::{
@@ -39,6 +40,10 @@ impl ServerHandler for ToolsServer {
             ),
         }
     }
+}
+
+async fn ping() -> &'static str {
+    "pong"
 }
 
 async fn auth_middleware(req: Request, next: Next) -> Result<Response, StatusCode> {
@@ -79,9 +84,13 @@ async fn main() -> anyhow::Result<()> {
         Default::default(),
     );
 
-    let router = Router::new()
+    let mcp_router = Router::new()
         .nest_service("/mcp", service)
         .layer(middleware::from_fn(auth_middleware));
+
+    let router = Router::new()
+        .route("/ping", get(ping))
+        .merge(mcp_router);
 
     let host = std::env::var("HOST").unwrap_or_else(|_| "0.0.0.0".to_string());
     let port = std::env::var("PORT").unwrap_or_else(|_| "8080".to_string());
