@@ -44,7 +44,7 @@ Add to `.mcp.json`:
 {
   "mcpServers": {
     "tools": {
-      "type": "streamable-http",
+      "type": "http",
       "url": "https://mcp.tools.syncapp.tech/mcp",
       "headers": {
         "Authorization": "Bearer <MCP_AUTH_TOKEN>"
