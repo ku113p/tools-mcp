@@ -21,6 +21,7 @@ cp ./target/release/$APP_NAME /bin/server
 
 
 FROM alpine:3.18 AS final
+LABEL org.opencontainers.image.source=https://github.com/ku113p/tools-mcp
 
 RUN apk add --no-cache libgcc
 
